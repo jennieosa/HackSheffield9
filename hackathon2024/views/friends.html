@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .user-list-container {
+        width: 100%;
+        max-width: 600px;
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .user-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      .user-row:last-child {
+        border-bottom: none;
+      }
+      .user-info {
+        display: flex;
+        align-items: center;
+      }
+      .profile-pic {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+      }
+      .username {
+        text-decoration: none;
+        color: #007bff;
+        font-size: 1.1em;
+      }
+      .username:hover {
+        color: #0056b3;
+      }
+      .remove-friend-button {
+        padding: 5px 10px;
+        background-color: #ff4d4d;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .remove-friend-button:hover {
+        background-color: #e60000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="user-list-container">
+      <!-- User Row 1 -->
+      <div class="user-row">
+        <div class="user-info">
+          <img
+            src="https://via.placeholder.com/50"
+            alt="User Profile Picture"
+            class="profile-pic"
+          />
+          <a href="profile.html" class="username">User1</a>
+        </div>
+        <button class="remove-friend-button">Remove Friend</button>
+      </div>
+
+      <!-- User Row 2 -->
+      <div class="user-row">
+        <div class="user-info">
+          <img
+            src="https://via.placeholder.com/50"
+            alt="User Profile Picture"
+            class="profile-pic"
+          />
+          <a href="profile.html" class="username">User2</a>
+        </div>
+        <button class="remove-friend-button">Remove Friend</button>
+      </div>
+
+      <!-- User Row 3 -->
+      <div class="user-row">
+        <div class="user-info">
+          <img
+            src="https://via.placeholder.com/50"
+            alt="User Profile Picture"
+            class="profile-pic"
+          />
+          <a href="profile.html" class="username">User3</a>
+        </div>
+        <button class="remove-friend-button">Remove Friend</button>
+      </div>
+
+      <!-- Add more user rows as needed -->
+    </div>
+  </body>
+</html>

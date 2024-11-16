@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .post-container {
+        width: 100%;
+        max-width: 600px;
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .post-header {
+        text-align: center;
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .user-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+      .profile-pic {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+      }
+      .username {
+        font-size: 1.2em;
+        color: #333;
+        text-decoration: none;
+      }
+      .username:hover {
+        color: #007bff;
+      }
+      .post-photo {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+        border-radius: 10px;
+      }
+      .rating-container {
+        text-align: center;
+        margin-top: 15px;
+      }
+      .star {
+        font-size: 2em;
+        color: #ccc;
+        cursor: pointer;
+      }
+      .star:hover,
+      .star.selected {
+        color: #ffcc00;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="post-container">
+      <!-- Theme Heading -->
+      <div class="post-header">Theme</div>
+
+      <!-- User Info -->
+      <div class="user-info">
+        <img
+          src="https://via.placeholder.com/50"
+          alt="Profile Picture"
+          class="profile-pic"
+        />
+        <a href="#" class="username">User1</a>
+      </div>
+
+      <!-- Post Photo -->
+      <img
+        src="https://via.placeholder.com/600x400"
+        alt="Post Photo"
+        class="post-photo"
+      />
+
+      <!-- Rating System -->
+      <div class="rating-container">
+        <span class="star" data-rating="1">&#9733;</span>
+        <span class="star" data-rating="2">&#9733;</span>
+        <span class="star" data-rating="3">&#9733;</span>
+        <span class="star" data-rating="4">&#9733;</span>
+        <span class="star" data-rating="5">&#9733;</span>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript for star rating interaction
+      const stars = document.querySelectorAll(".star");
+      stars.forEach((star) => {
+        star.addEventListener("click", () => {
+          stars.forEach((s) => s.classList.remove("selected"));
+          star.classList.add("selected");
+          let rating = star.getAttribute("data-rating");
+          alert(`You rated this post ${rating} star(s)!`);
+        });
+        star.addEventListener("mouseover", () => {
+          stars.forEach((s) => (s.style.color = "#ccc"));
+          for (let i = 0; i < star.dataset.rating; i++) {
+            stars[i].style.color = "#ffcc00";
+          }
+        });
+        star.addEventListener("mouseout", () => {
+          stars.forEach(
+            (s) =>
+              (s.style.color = s.classList.contains("selected")
+                ? "#ffcc00"
+                : "#ccc")
+          );
+        });
+      });
+    </script>
+  </body>
+</html>
