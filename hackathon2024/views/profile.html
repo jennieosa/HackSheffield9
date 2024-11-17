@@ -67,6 +67,47 @@
       .social-links a:hover {
         color: #0056b3;
       }
+
+      /* General button styles */
+      .btn {
+          padding: 10px 20px;
+          font-size: 16px;
+          border: none;
+          cursor: pointer;
+          border-radius: 5px;
+          margin: 10px;
+          transition: background-color 0.3s ease;
+      }
+
+      /* Logout Button Styles */
+      .logout-btn {
+          background-color: #ff4b4b;
+          color: white;
+      }
+
+      .logout-btn:hover {
+          background-color: #e63939;
+      }
+
+      /* Edit Button Styles */
+      .edit-btn {
+          background-color: #4caf50;
+          color: white;
+      }
+
+      .edit-btn:hover {
+          background-color: #388e3c;
+      }
+
+      /* Optional: Layout for the button forms */
+      .button-form {
+          display: inline-block;
+      }
+
+      .buttons-wrapper {
+          text-align: center;
+          margin-top: 20px;
+      }
     </style>
   </head>
   <body>
@@ -81,6 +122,7 @@
         <!-- Bio Section -->
         <div class="bio">
           <p>This is the bio!</p>
+          <span id="bio"></span>
         </div>
 
         <!-- Social Links Section -->
@@ -88,6 +130,14 @@
           <a href="fragments/post.html">Fave post 1</a>
           <a href="fragments/post.html">Fave post 2</a>
           <a href="fragments/post.html">Fave post 3</a>
+        </div>
+
+        <div class="buttons-wrapper">
+          <form action="/logout" method="GET" class="button-form">
+            <button type="submit" class="btn logout-btn">Logout</button>
+          </form>
+
+          <button onclick="window.location.href='/edit-profile'" class="btn edit-btn">Edit Profile</button>
         </div>
       </div>
     </main>
@@ -103,6 +153,16 @@
         .catch(error => {
             document.getElementById('username').textContent = 'Guest';
         });
+
+    // Fetch the bio from the server-side API0
+    fetch('/api/bio')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('bio').textContent = data.bio;
+    })
+    .catch(error => {
+        document.getElementById('bio').textContent = 'This is a bio';
+    });
   </script>
   </body>
 </html>

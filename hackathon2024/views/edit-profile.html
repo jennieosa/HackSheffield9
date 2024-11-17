@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Page</title>
+    <!--favicon-->
+    <link rel="icon" type="image/x-icon" href="images/ember_logo.png">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .profile-container {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .profile-header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .profile-header img {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+      }
+
+      .profile-header h1 {
+        margin-top: 10px;
+        font-size: 2em;
+        color: #333;
+      }
+
+      .bio {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 1.1em;
+        color: #555;
+      }
+
+      .social-links {
+        margin-top: 30px;
+        text-align: center;
+      }
+
+      .social-links a {
+        margin: 0 15px;
+        text-decoration: none;
+        color: #007bff;
+        font-size: 1.2em;
+      }
+
+      .social-links a:hover {
+        color: #0056b3;
+      }
+
+      /* General button styles */
+      .btn {
+          padding: 10px 20px;
+          font-size: 16px;
+          border: none;
+          cursor: pointer;
+          border-radius: 5px;
+          margin: 10px;
+          transition: background-color 0.3s ease;
+      }
+
+      /* Logout Button Styles */
+      .logout-btn {
+          background-color: #ff4b4b;
+          color: white;
+      }
+
+      .logout-btn:hover {
+          background-color: #e63939;
+      }
+
+      /* Edit Button Styles */
+      .edit-btn {
+          background-color: #4caf50;
+          color: white;
+      }
+
+      .edit-btn:hover {
+          background-color: #388e3c;
+      }
+
+      /* Optional: Layout for the button forms */
+      .button-form {
+          display: inline-block;
+      }
+
+      .buttons-wrapper {
+          text-align: center;
+          margin-top: 20px;
+      }
+
+      .form-container {
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      input[type="text"],
+      input[type="file"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <h1>Edit Profile</h1>
+            <h2><span id="username"></span></h2>
+            <p>Streak</p>
+        </div>
+        <!-- Bio Section -->
+        <div class="bio">
+          <span id="bio"></span>
+        </div>
+
+        
+
+        
+        <div class="form-container">
+            <label for="photo">Profile Picture</label>
+            <input type="file" id="pfp" name="pfp" accept="image/*" />
+
+            <form action="/edit-profile" method="POST" class="button-form">
+            
+            <label for="theme">Bio</label>
+            <input type="text" id="bio" name="bio" value="" required />
+
+            <button type="submit" class="btn edit-btn">Save Changes</button>
+            </form>
+
+        </div>
+
+        
+          <form class="buttons-wrapper" action="/profile" method="GET" class="button-form">
+            <button class="btn logout-btn">Back</button>
+          </form>
+        
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Fetch the username from the server-side API
+    fetch('/api/username')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('username').textContent = data.username;
+        })
+        .catch(error => {
+            document.getElementById('username').textContent = 'Guest';
+        });
+
+        // Fetch the bio from the server-side API
+    fetch('/api/bio')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('bio').textContent = data.bio;
+        })
+        .catch(error => {
+            document.getElementById('bio').textContent = 'This is a bio';
+        });
+  </script>
+
+  </body>
+</html>
