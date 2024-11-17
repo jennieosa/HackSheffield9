@@ -72,10 +72,10 @@
   <body>
     <nav>
       <ul>
-        <li id = "logo"><a href="/home"><img src="images/ember_logo.png" alt = "logo" class="logo"></a></li>
-        <li><a href="/home">Home</a></li>
-        <li><a href="/leaderboard">Leaderboard</a></li>
-        <li><a href="/profile">Profile</a></li>
+        <li id = "logo"><a href="home.html"><img src="images/ember_logo.png" alt = "logo" class="logo"></a></li>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="profile.html">Profile</a></li>
       </ul>
     </nav>
 
@@ -84,10 +84,9 @@
         <!-- Profile Header -->
         <div class="profile-header">
           <img src="https://via.placeholder.com/150" alt="Profile Picture" />
-          <h1>Username</h1>
+          <h1><span id="username"></span></h1>
           <p>Streak</p>
         </div>
-
         <!-- Bio Section -->
         <div class="bio">
           <p>This is the bio!</p>
@@ -101,5 +100,18 @@
         </div>
       </div>
     </main>
+  </div>
+
+  <script>
+    // Fetch the username from the server-side API
+    fetch('/api/username')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('username').textContent = data.username;
+        })
+        .catch(error => {
+            document.getElementById('username').textContent = 'Guest';
+        });
+  </script>
   </body>
 </html>
