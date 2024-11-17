@@ -67,7 +67,7 @@ input {
 
 button {
     padding: 10px;
-    background-color: #007bff;
+    background-color: #d47325;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -76,12 +76,12 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #d47325;
 }
 
 a {
     text-align: center;
-    color: #007bff;
+    color: #d47325;
     text-decoration: none;
     font-size: 14px;
 }
