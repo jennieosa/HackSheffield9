@@ -55,13 +55,197 @@ app.get('/api/username', (req, res) => {
     res.json({ username });
 });
 
-// Serve home page (after successful login/registration)
 app.get('/home', (req, res) => {
-  if (!req.cookies.userId) {
-    return res.redirect('/login');
-  }
-  res.sendFile(__dirname + '/views/home.html');
+  // Query to fetch all posts from the posts table
+  db.all('SELECT p.post_id, p.theme, p.photo, u.username FROM posts p JOIN users u ON p.user_id = u.user_id', (err, rows) => {
+    if (err) {
+      console.error("Database error:", err.message);
+      return res.status(500).send("Error retrieving posts.");
+    }
+
+    // Prepare the HTML content for posts
+    const postsHTML = rows.map(post => {
+      return `
+        <div class="post-item">
+          <div class="post-header">${post.theme}</div>
+          <div class="user-info">
+            <img src="https://via.placeholder.com/50" alt="Profile Picture" class="profile-pic" />
+            <a href="#" class="username">${post.username}</a>
+          </div>
+          <img src="data:image/jpeg;base64,${post.photo.toString('base64')}" alt="Post Photo" class="post-photo" />
+          <div class="rating-container">
+            <span class="star" data-rating="1">&#9733;</span>
+            <span class="star" data-rating="2">&#9733;</span>
+            <span class="star" data-rating="3">&#9733;</span>
+            <span class="star" data-rating="4">&#9733;</span>
+            <span class="star" data-rating="5">&#9733;</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Send the complete HTML for the home page
+    const html = `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Home Page</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f4f4f4;
+              margin: 0;
+              padding: 20px;
+            }
+
+            .header {
+              text-align: center;
+              margin-bottom: 20px;
+            }
+
+            .theme-container {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 20px;
+            }
+
+            .post-container {
+              display: flex;
+              overflow-x: scroll;
+              gap: 20px;
+              padding-bottom: 20px;
+            }
+
+            .post-item {
+              width: 300px;
+              background-color: white;
+              border-radius: 10px;
+              padding: 15px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .post-header {
+              text-align: center;
+              font-size: 1.5em;
+              font-weight: bold;
+              margin-bottom: 20px;
+            }
+
+            .user-info {
+              display: flex;
+              align-items: center;
+              margin-bottom: 15px;
+            }
+
+            .profile-pic {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              object-fit: cover;
+              margin-right: 15px;
+            }
+
+            .username {
+              font-size: 1.2em;
+              color: #333;
+              text-decoration: none;
+            }
+
+            .username:hover {
+              color: #007bff;
+            }
+
+            .post-photo {
+              width: 100%;
+              height: auto;
+              margin-bottom: 15px;
+              border-radius: 10px;
+            }
+
+            .rating-container {
+              text-align: center;
+              margin-top: 15px;
+            }
+
+            .star {
+              font-size: 2em;
+              color: #ccc;
+              cursor: pointer;
+            }
+
+            .star:hover,
+            .star.selected {
+              color: #ffcc00;
+            }
+
+            .cta-buttons {
+              margin-top: 20px;
+            }
+
+            .cta-button {
+              background-color: #007bff;
+              color: white;
+              padding: 10px 20px;
+              border-radius: 5px;
+              text-decoration: none;
+              font-size: 1em;
+            }
+
+            .cta-button:hover {
+              background-color: #0056b3;
+            }
+          </style>
+        </head>
+        <body>
+          <header class="header">
+            <h1>Welcome to Ember</h1>
+          </header>
+
+          <div class="theme-container">
+            <a href="/createpost" class="cta-button">Post Now</a>
+          </div>
+
+          <div class="post-container">
+            ${postsHTML}
+          </div>
+
+          <script>
+            // JavaScript for star rating interaction
+            const stars = document.querySelectorAll(".star");
+            stars.forEach((star) => {
+              star.addEventListener("click", () => {
+                stars.forEach((s) => s.classList.remove("selected"));
+                star.classList.add("selected");
+                let rating = star.getAttribute("data-rating");
+                alert("You rated this post " + rating + " star(s)!");
+              });
+              star.addEventListener("mouseover", () => {
+                stars.forEach((s) => (s.style.color = "#ccc"));
+                for (let i = 0; i < star.dataset.rating; i++) {
+                  stars[i].style.color = "#ffcc00";
+                }
+              });
+              star.addEventListener("mouseout", () => {
+                stars.forEach(
+                  (s) =>
+                    (s.style.color = s.classList.contains("selected")
+                      ? "#ffcc00"
+                      : "#ccc")
+                );
+              });
+            });
+          </script>
+        </body>
+      </html>
+    `;
+
+    res.send(html);
+  });
 });
+
 
 // Create post page (fixed to correctly fetch the theme)
 app.get('/createpost', (req, res) => {

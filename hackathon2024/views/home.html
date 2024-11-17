@@ -1,3 +1,36 @@
+app.get('/home', (req, res) => { // Query to fetch all posts from the posts
+table along with their theme db.all('SELECT p.post_id, p.theme, p.photo,
+u.username FROM posts p JOIN users u ON p.user_id = u.user_id', (err, rows) => {
+if (err) { console.error("Database error:", err.message); return
+res.status(500).send("Error retrieving posts."); } // Prepare the HTML content
+for posts, including dynamic themes const postsHTML = rows.map(post => { return
+`
+<div class="post-item">
+  <div class="post-header">${post.theme}</div>
+  <div class="user-info">
+    <img
+      src="https://via.placeholder.com/50"
+      alt="Profile Picture"
+      class="profile-pic"
+    />
+    <a href="#" class="username">${post.username}</a>
+  </div>
+  <img
+    src="data:image/jpeg;base64,${post.photo.toString('base64')}"
+    alt="Post Photo"
+    class="post-photo"
+  />
+  <div class="rating-container">
+    <span class="star" data-rating="1">&#9733;</span>
+    <span class="star" data-rating="2">&#9733;</span>
+    <span class="star" data-rating="3">&#9733;</span>
+    <span class="star" data-rating="4">&#9733;</span>
+    <span class="star" data-rating="5">&#9733;</span>
+  </div>
+</div>
+`; }).join(''); // Join all the individual post items into one large string //
+Send the complete HTML for the home page with the posts and the theme
+dynamically passed const html = `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -27,11 +60,12 @@
       .post-container {
         display: flex;
         overflow-x: scroll;
-        gap: 20px; /* Space between posts */
+        gap: 20px;
+        padding-bottom: 20px;
       }
 
       .post-item {
-        width: 300px; /* Fixed size for each post */
+        width: 400px;
         background-color: white;
         border-radius: 10px;
         padding: 15px;
@@ -112,92 +146,15 @@
   </head>
   <body>
     <header class="header">
-      <h1>Welcome to Ember - Theme: Photography</h1>
+      <h1>Welcome to Ember</h1>
     </header>
 
     <div class="theme-container">
-      <h2>Theme</h2>
+      <!-- Dynamically show the theme -->
       <a href="/createpost" class="cta-button">Post Now</a>
     </div>
 
-    <div class="post-container">
-      <!-- 6 identical posts for now -->
-      <div class="post-item">
-        <div class="post-header">Theme</div>
-        <div class="user-info">
-          <img
-            src="https://via.placeholder.com/50"
-            alt="Profile Picture"
-            class="profile-pic"
-          />
-          <a href="#" class="username">User1</a>
-        </div>
-        <img
-          src="https://via.placeholder.com/600x400"
-          alt="Post Photo"
-          class="post-photo"
-        />
-        <div class="rating-container">
-          <span class="star" data-rating="1">&#9733;</span>
-          <span class="star" data-rating="2">&#9733;</span>
-          <span class="star" data-rating="3">&#9733;</span>
-          <span class="star" data-rating="4">&#9733;</span>
-          <span class="star" data-rating="5">&#9733;</span>
-        </div>
-      </div>
-
-      <!-- Repeat the post-item div 5 more times -->
-      <div class="post-item">
-        <div class="post-header">Theme</div>
-        <div class="user-info">
-          <img
-            src="https://via.placeholder.com/50"
-            alt="Profile Picture"
-            class="profile-pic"
-          />
-          <a href="#" class="username">User2</a>
-        </div>
-        <img
-          src="https://via.placeholder.com/600x400"
-          alt="Post Photo"
-          class="post-photo"
-        />
-        <div class="rating-container">
-          <span class="star" data-rating="1">&#9733;</span>
-          <span class="star" data-rating="2">&#9733;</span>
-          <span class="star" data-rating="3">&#9733;</span>
-          <span class="star" data-rating="4">&#9733;</span>
-          <span class="star" data-rating="5">&#9733;</span>
-        </div>
-      </div>
-
-      <!-- Repeat as needed, but for now we are showing 6 identical posts -->
-      <div class="post-item">
-        <div class="post-header">Theme</div>
-        <div class="user-info">
-          <img
-            src="https://via.placeholder.com/50"
-            alt="Profile Picture"
-            class="profile-pic"
-          />
-          <a href="#" class="username">User3</a>
-        </div>
-        <img
-          src="https://via.placeholder.com/600x400"
-          alt="Post Photo"
-          class="post-photo"
-        />
-        <div class="rating-container">
-          <span class="star" data-rating="1">&#9733;</span>
-          <span class="star" data-rating="2">&#9733;</span>
-          <span class="star" data-rating="3">&#9733;</span>
-          <span class="star" data-rating="4">&#9733;</span>
-          <span class="star" data-rating="5">&#9733;</span>
-        </div>
-      </div>
-
-      <!-- Repeat 3 more times... -->
-    </div>
+    <div class="post-container">${postsHTML}</div>
 
     <script>
       // JavaScript for star rating interaction
@@ -207,7 +164,7 @@
           stars.forEach((s) => s.classList.remove("selected"));
           star.classList.add("selected");
           let rating = star.getAttribute("data-rating");
-          alert(`You rated this post ${rating} star(s)!`);
+          alert("You rated this post " + rating + " star(s)!");
         });
         star.addEventListener("mouseover", () => {
           stars.forEach((s) => (s.style.color = "#ccc"));
@@ -227,3 +184,4 @@
     </script>
   </body>
 </html>
+`; res.send(html); }); });
