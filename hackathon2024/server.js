@@ -1,3 +1,4 @@
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
@@ -6,6 +7,7 @@ const db = require('./database');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const cron = require('node-cron');
 const app = express();
 
 // Set up multer to store files as buffers (no disk storage)
@@ -61,13 +63,30 @@ app.get('/home', (req, res) => {
   res.sendFile(__dirname + '/views/home.html');
 });
 
-// Serve create post page (after successful login/registration)
+// Create post page (fixed to correctly fetch the theme)
 app.get('/createpost', (req, res) => {
   if (!req.cookies.userId) {
     return res.redirect('/login');
   }
-  res.sendFile(__dirname + '/views/createpost.html');
+
+  // Query to get the current theme from the database
+  db.get("SELECT theme FROM daily_theme WHERE id = 1", (err, row) => {
+    if (err) {
+      console.error("Error fetching theme from database:", err);
+      return res.redirect('/home'); // Handle errors gracefully
+    }
+
+    // If no theme is found (which should not happen), default to 'Default Theme'
+    const theme = row ? row.theme : 'Default Theme';
+
+    // Now send the create post page with the current theme
+    res.sendFile(__dirname + '/views/createpost.html', {
+      theme: theme
+    });
+  });
 });
+
+
 
 // Registration route
 app.post('/register', (req, res) => {
@@ -105,22 +124,6 @@ app.post('/register', (req, res) => {
       });
     });
   });
-  
-//   // Hash the password
-//   bcrypt.hash(password, 10, (err, hashedPassword) => {
-//     if (err) {
-//       return res.status(500).send("Error in hashing password.");
-//     }
-
-//     // Insert user into the database
-//     db.run("INSERT INTO users (username, email, password) VALUES (?, ?. ?)", [username, email, hashedPassword], function(err) {
-//       if (err) {
-//         console.error("Error inserting user:", email);
-//         return res.status(500).send("Error in registering user.");
-//       }
-//       res.redirect('/login');
-//     });
-//   });
 });
 
 // Login route
@@ -306,7 +309,7 @@ app.get('/post/:postId', (req, res) => {
                   stars.forEach((s) => s.classList.remove("selected"));
                   star.classList.add("selected");
                   let rating = star.getAttribute("data-rating");
-                  alert(\`You rated this post \${rating} star(s)!\`);
+                  alert(\You rated this post \${rating} star(s)!\);
                 });
                 star.addEventListener("mouseover", () => {
                   stars.forEach((s) => (s.style.color = "#ccc"));
@@ -333,6 +336,61 @@ app.get('/post/:postId', (req, res) => {
     });
   });
 });
+
+
+// Update the cron job to set the theme cookie
+// This runs every minute for testing purposes
+// Change to run daily when submitting ///////////////////////////////////////////////////////////////
+cron.schedule('*/1 * * * *', () => { 
+  const themes = [
+    'Scenic', 'Portrait', 'Abstract', 'Negative Space', 'Minimalism', 'Surrealism', 'Street Photography',
+    'Monochrome', 'Macro Photography', 'Bokeh Effect', 'Silhouette', 'Reflection', 'Motion Blur',
+    'Golden Hour', 'High Key', 'Low Key', 'Rule of Thirds', 'Perspective', 'Geometric Patterns', 'Double Exposure',
+    'Texture', 'Still Life', 'Landscape', 'Fashion', 'Wildlife', 'Candid', 'HDR (High Dynamic Range)', 
+    'Light and Shadows', 'Leading Lines', 'Symmetry', 'Depth of Field', 'Long Exposure', 'Mood and Emotion', 
+    'Architecture', 'Color Blocking', 'Nature and Wildlife', 'Urban Exploration'
+  ];
+
+  const newTheme = themes[Math.floor(Math.random() * themes.length)];
+  const currentTime = new Date().toISOString();
+
+  db.run(
+    "INSERT OR REPLACE INTO daily_theme (id, theme, last_updated) VALUES (1, ?, ?)",
+    [newTheme, currentTime],
+    (err) => {
+      if (err) {
+        console.error("Error updating theme in cron job:", err);
+      } else {
+        console.log(`Theme updated to '${newTheme}' at ${currentTime}`);
+
+        // After updating the theme in the database, set the cookie
+        app.use((req, res, next) => {
+          res.cookie('theme', newTheme, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+            sameSite: 'Strict',
+            secure: false // Use `true` if your app is served over HTTPS
+          });
+          next();
+        });
+      }
+    }
+  );
+});
+
+// API route to get the theme from the database
+app.get('/api/theme', (req, res) => {
+  db.get("SELECT theme FROM daily_theme WHERE id = 1", (err, row) => {
+    if (err) {
+      console.error("Error fetching theme from database:", err);
+      return res.status(500).json({ error: 'Error fetching theme' });
+    }
+
+    const theme = row ? row.theme : 'Default Theme';
+    res.json({ theme: theme });
+  });
+});
+
 
 // Start the server
 app.listen(3000, () => {

@@ -71,6 +71,13 @@ const db = new sqlite3.Database('./hackathon.db', (err) => {
             if (err) console.error('Error creating fave_posts table:', err.message);
         });
 
+        db.run (`CREATE TABLE IF NOT EXISTS daily_theme (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                theme TEXT,
+                last_updated DATE
+            )`, (err) => {
+            if (err) console.error('Error creating daily_theme table:', err.message);
+        });
         
 
         console.log('All tables created successfully.');

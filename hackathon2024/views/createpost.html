@@ -63,16 +63,22 @@
         <input type="file" id="photo" name="photo" accept="image/*" required />
 
         <label for="theme">Theme</label>
-        <input
-          type="text"
-          id="theme"
-          name="theme"
-          value="Photography"
-          readonly
-        />
+        <input type="text" id="theme" name="theme" value="" readonly />
 
         <button type="submit">Submit Post</button>
       </form>
     </div>
+
+    <script>
+      // Fetch the theme from the server-side API and populate the readonly theme input field
+      fetch("/api/theme")
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("theme").value = data.theme; // Set the theme in the readonly input field
+        })
+        .catch((error) => {
+          document.getElementById("theme").value = "Default Theme"; // Fallback in case of error
+        });
+    </script>
   </body>
 </html>
