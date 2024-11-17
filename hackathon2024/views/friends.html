@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="favicon_1.png">
     <style>
       body {
@@ -11,7 +12,6 @@
         background-color: #f4f4f4;
         margin: 0;
         padding: 20px;
-        display: flex;
         justify-content: center;
       }
       .user-list-container {
@@ -62,57 +62,92 @@
       .remove-friend-button:hover {
         background-color: #e60000;
       }
+
+      main{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      nav ul li{
+        padding-left: 10px;
+        border: none;
+      }
+
+      nav ul{
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+      }
+
+      nav {
+        width: 100%;
+      }
     </style>
   </head>
   <body>
     <nav>
       <ul>
-        <li>Home</li>
-        <li>Leaderboard</li>
-        <li>Profile</li>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="friends.html">Leaderboard</a></li>
+        <li><a href="profile.html">Profile</a></li>
       </ul>
     </nav>
-    <div class="user-list-container">
-      <!-- User Row 1 -->
-      <div class="user-row">
-        <div class="user-info">
-          <img
-            src="https://via.placeholder.com/50"
-            alt="User Profile Picture"
-            class="profile-pic"
-          />
-          <a href="profile.html" class="username">User1</a>
-        </div>
-        <button class="remove-friend-button">Remove</button>
-      </div>
-
-      <!-- User Row 2 -->
-      <div class="user-row">
-        <div class="user-info">
-          <img
-            src="https://via.placeholder.com/50"
-            alt="User Profile Picture"
-            class="profile-pic"
-          />
-          <a href="profile.html" class="username">User2</a>
-        </div>
-        <button class="remove-friend-button">Remove</button>
-      </div>
-
-      <!-- User Row 3 -->
-      <div class="user-row">
-        <div class="user-info">
-          <img
-            src="https://via.placeholder.com/50"
-            alt="User Profile Picture"
-            class="profile-pic"
-          />
-          <a href="profile.html" class="username">User3</a>
-        </div>
-        <button class="remove-friend-button">Remove</button>
-      </div>
-
-      <!-- Add more user rows as needed -->
+    <main>
+      <div class="search-container">
+        <form id="searchForm">
+            <input type="text" id="searchInput" placeholder="Search.." name="search">
+            <button id="searchButton" type="submit">
+                <span>
+                    <i class="fa fa-search"></i>
+                </span>
+            </button>
+        </form>
     </div>
+
+      <div class="user-list-container">
+        <!-- User Row 1 -->
+        <div class="user-row">
+          <div class="user-info">
+            <img
+              src="https://via.placeholder.com/50"
+              alt="User Profile Picture"
+              class="profile-pic"
+            />
+            <a href="profile.html" class="username">User1</a>
+          </div>
+          <button class="remove-friend-button">Remove</button>
+        </div>
+
+        <!-- User Row 2 -->
+        <div class="user-row">
+          <div class="user-info">
+            <img
+              src="https://via.placeholder.com/50"
+              alt="User Profile Picture"
+              class="profile-pic"
+            />
+            <a href="profile.html" class="username">User2</a>
+          </div>
+          <button class="remove-friend-button">Remove</button>
+        </div>
+
+        <!-- User Row 3 -->
+        <div class="user-row">
+          <div class="user-info">
+            <img
+              src="https://via.placeholder.com/50"
+              alt="User Profile Picture"
+              class="profile-pic"
+            />
+            <a href="profile.html" class="username">User3</a>
+          </div>
+          <button class="remove-friend-button">Remove</button>
+        </div>
+
+        <!-- Add more user rows as needed -->
+      </div>
+    </main>
   </body>
 </html>
