@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile Page</title>
+    <!--favicon-->
+    <link rel="icon" type="image/x-icon" href="images/ember_logo.png">
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -68,25 +70,39 @@
     </style>
   </head>
   <body>
-    <div class="profile-container">
-      <!-- Profile Header -->
-      <div class="profile-header">
-        <img src="https://via.placeholder.com/150" alt="Profile Picture" />
-        <h1>Username</h1>
-        <p>Streak</p>
-      </div>
+    <main>
+      <div class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+          <img src="https://via.placeholder.com/150" alt="Profile Picture" />
+          <h1><span id="username"></span></h1>
+          <p>Streak</p>
+        </div>
+        <!-- Bio Section -->
+        <div class="bio">
+          <p>This is the bio!</p>
+        </div>
 
-      <!-- Bio Section -->
-      <div class="bio">
-        <p>This is the bio!</p>
+        <!-- Social Links Section -->
+        <div class="social-links">
+          <a href="fragments/post.html">Fave post 1</a>
+          <a href="fragments/post.html">Fave post 2</a>
+          <a href="fragments/post.html">Fave post 3</a>
+        </div>
       </div>
+    </main>
+  </div>
 
-      <!-- Social Links Section -->
-      <div class="social-links">
-        <a href="fragments/post.html">Fave post 1</a>
-        <a href="fragments/post.html">Fave post 2</a>
-        <a href="fragments/post.html">Fave post 3</a>
-      </div>
-    </div>
+  <script>
+    // Fetch the username from the server-side API
+    fetch('/api/username')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('username').textContent = data.username;
+        })
+        .catch(error => {
+            document.getElementById('username').textContent = 'Guest';
+        });
+  </script>
   </body>
 </html>

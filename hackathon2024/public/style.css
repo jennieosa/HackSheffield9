@@ -41,7 +41,6 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     height: 100vh;
     background-color: #f4f4f9;
@@ -89,4 +88,28 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+nav ul li{
+    padding-left: 10px;
+    border: none;
+  }
+
+  nav ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  nav {
+    width: 100%;
+  }
+
+  #logo{
+    border: none;
+}
+
+.logo{
+    width:50px;
 }

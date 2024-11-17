@@ -28,6 +28,31 @@ app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/views/login.html');
 });
 
+// Serve friends page
+app.get('/friends', (req, res) => {
+    res.sendFile(__dirname + '/views/friends.html');
+  });
+
+// Serve profile page
+app.get('/profile', (req, res) => {
+    const username = req.cookies.username;
+
+    // Check if the cookie exists
+    if (!username) {
+        console.log('No cookie found, redirecting to login.');
+        return res.redirect('/login');
+    } else {
+        console.log('Cookie found:', username);
+        res.sendFile(__dirname + '/views/profile.html');
+    }
+  });
+
+// API route to get the username cookie value
+app.get('/api/username', (req, res) => {
+    const username = req.cookies.username || 'Guest';
+    res.json({ username });
+});
+
 // Serve home page (after successful login/registration)
 app.get('/home', (req, res) => {
   if (!req.cookies.userId) {
@@ -52,6 +77,7 @@ app.post('/register', (req, res) => {
     return res.status(400).send("Email is required.");
   }
 
+  // Check if the email already exists
   db.get("SELECT * FROM users WHERE email = ?", [email], (err, row) => {
     if (err) {
       console.error("Error checking email:", err.message);
@@ -62,11 +88,13 @@ app.post('/register', (req, res) => {
       return res.status(400).send("Email already registered.");
     }
 
+    // Proceed with hashing password and inserting user
     bcrypt.hash(password, 10, (err, hashedPassword) => {
       if (err) {
         return res.status(500).send("Error in hashing password.");
       }
 
+      // Insert the user into the database
       db.run("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword], function(err) {
         if (err) {
           console.error("Database Insert Error:", err.message);
@@ -77,6 +105,22 @@ app.post('/register', (req, res) => {
       });
     });
   });
+  
+//   // Hash the password
+//   bcrypt.hash(password, 10, (err, hashedPassword) => {
+//     if (err) {
+//       return res.status(500).send("Error in hashing password.");
+//     }
+
+//     // Insert user into the database
+//     db.run("INSERT INTO users (username, email, password) VALUES (?, ?. ?)", [username, email, hashedPassword], function(err) {
+//       if (err) {
+//         console.error("Error inserting user:", email);
+//         return res.status(500).send("Error in registering user.");
+//       }
+//       res.redirect('/login');
+//     });
+//   });
 });
 
 // Login route
@@ -87,13 +131,22 @@ app.post('/login', (req, res) => {
     if (err || !user) {
       return res.status(401).send("User not found.");
     }
+    
+    // Set the cookie with options to ensure it's sent correctly
+    res.cookie('username', user.username, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        sameSite: 'Strict', // Helps with CSRF protection
+        secure: false // Set to true if you're using HTTPS
+    });
 
     bcrypt.compare(password, user.password, (err, result) => {
       if (err || !result) {
         return res.status(401).send("Incorrect password.");
       }
 
-      res.cookie('userId', user.user_id, { maxAge: 86400000, httpOnly: true });
+      // Create a session (using a simple cookie)
+      res.cookie('userId', user.user_id, { maxAge: 86400000, httpOnly: true }); // 1 day
       res.redirect('/home');
     });
   });
@@ -102,6 +155,7 @@ app.post('/login', (req, res) => {
 // Logout route
 app.get('/logout', (req, res) => {
   res.clearCookie('userId');
+  res.clearCookie('username');
   res.redirect('/login');
 });
 
