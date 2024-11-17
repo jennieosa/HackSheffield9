@@ -11,8 +11,11 @@
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
         margin: 0;
-        padding: 20px;
         justify-content: center;
+      }
+
+      main{
+        padding: 20px;
       }
       .user-list-container {
         width: 100%;
@@ -42,6 +45,11 @@
         border-radius: 50%;
         object-fit: cover;
         margin-right: 15px;
+      }
+
+      #nav{
+        width: 40px;
+        height: 40px;
       }
       .username {
         text-decoration: none;
@@ -79,6 +87,8 @@
         list-style: none;
         display: flex;
         flex-direction: row;
+        background-color: white;
+        margin-top: 0px;
       }
 
       nav {
@@ -124,6 +134,50 @@
         text-align: center;
       }
 
+      a {
+              text-align: center;
+              color: #d47325;
+              text-decoration: none;
+              font-size: 14px;
+          }
+
+          a:hover {
+              text-decoration: underline;
+          }
+
+          nav ul li{
+              padding-left: 10px;
+              border: none;
+            }
+
+            nav ul{
+              list-style: none;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+            }
+
+            nav {
+              width: 100%;
+            }
+
+            #logo{
+              border: none;
+          }
+
+          .logo{
+              width:50px;
+          }
+
+          /* Footer styling */
+          .footer {
+              position: absolute;
+              bottom: 10px;
+              text-align: center;
+              font-size: 0.8em;
+              color: #777;
+            }
+
     </style>
   </head>
   <body>
@@ -132,7 +186,11 @@
         <li id = "logo"><a href="/home"><img src="images/ember_logo.png" alt = "logo" class="logo"></a></li>
         <li><a href="/home">Home</a></li>
         <li><a href="/leaderboard">Leaderboard</a></li>
-        <li><a href="/profile">Profile</a></li>
+        <li><a href="/profile"><img
+          src="https://via.placeholder.com/50"
+          alt="User Profile Picture"
+          class="profile-pic" id = "nav"
+        /></a></li>
       </ul>
     </nav>
     <main>

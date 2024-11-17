@@ -96,12 +96,16 @@ app.get('/home', (req, res) => {
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Home Page</title>
+          <title>Home</title>
+          <link rel="icon" type="image/x-icon" href="images/ember_logo.png">
           <style>
             body {
               font-family: Arial, sans-serif;
               background-color: #f4f4f4;
               margin: 0;
+            }
+            
+            main{
               padding: 20px;
             }
 
@@ -191,7 +195,7 @@ app.get('/home', (req, res) => {
             }
 
             .cta-button {
-              background-color: #007bff;
+              background-color: #d47325;
               color: white;
               padding: 10px 20px;
               border-radius: 5px;
@@ -200,50 +204,120 @@ app.get('/home', (req, res) => {
             }
 
             .cta-button:hover {
-              background-color: #0056b3;
+              background-color: #d47325;
             }
+            
+            a {
+              text-align: center;
+              color: #d47325;
+              text-decoration: none;
+              font-size: 14px;
+          }
+
+          a:hover {
+              text-decoration: underline;
+          }
+
+          nav ul li{
+              padding-left: 10px;
+              border: none;
+            }
+
+            nav ul{
+              list-style: none;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              background-color: white;
+              margin-top: 0px;
+            }
+
+            nav {
+              width: 100%;
+            }
+
+            #logo{
+              border: none;
+          }
+
+          .logo{
+              width:50px;
+          }
+
+          /* Footer styling */
+          .footer {
+              position: absolute;
+              bottom: 10px;
+              text-align: center;
+              font-size: 0.8em;
+              color: #777;
+            }
+
+            .profile-pic {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              object-fit: cover;
+              margin-right: 15px;
+            }
+
           </style>
         </head>
         <body>
-          <header class="header">
-            <h1>Welcome to Ember</h1>
-          </header>
+          <nav>
+            <ul>
+              <li id = "logo"><a href="/home"><img src="images/ember_logo.png" alt = "logo" class="logo"></a></li>
+              <li><a href="/home">Home</a></li>
+              <li><a href="/leaderboard">Leaderboard</a></li>
+              <li><a href="/profile"><img
+                src="https://via.placeholder.com/50"
+                alt="User Profile Picture"
+                class="profile-pic"
+              /></a></li>
+            </ul>
+          </nav>
 
-          <div class="theme-container">
-            <a href="/createpost" class="cta-button">Post Now</a>
-          </div>
+          <main>
+            <header class="header">
+              <h1>Welcome to Ember</h1>
+            </header>
 
-          <div class="post-container">
-            ${postsHTML}
-          </div>
+            <div class="theme-container">
+              <a href="/createpost" class="cta-button">Post Now</a>
+            </div>
 
-          <script>
-            // JavaScript for star rating interaction
-            const stars = document.querySelectorAll(".star");
-            stars.forEach((star) => {
-              star.addEventListener("click", () => {
-                stars.forEach((s) => s.classList.remove("selected"));
-                star.classList.add("selected");
-                let rating = star.getAttribute("data-rating");
-                alert("You rated this post " + rating + " star(s)!");
+            <div class="post-container">
+              ${postsHTML}
+            </div>
+
+            <script>
+              // JavaScript for star rating interaction
+              const stars = document.querySelectorAll(".star");
+              stars.forEach((star) => {
+                star.addEventListener("click", () => {
+                  stars.forEach((s) => s.classList.remove("selected"));
+                  star.classList.add("selected");
+                  let rating = star.getAttribute("data-rating");
+                  alert("You rated this post " + rating + " star(s)!");
+                });
+                star.addEventListener("mouseover", () => {
+                  stars.forEach((s) => (s.style.color = "#ccc"));
+                  for (let i = 0; i < star.dataset.rating; i++) {
+                    stars[i].style.color = "#ffcc00";
+                  }
+                });
+                star.addEventListener("mouseout", () => {
+                  stars.forEach(
+                    (s) =>
+                      (s.style.color = s.classList.contains("selected")
+                        ? "#ffcc00"
+                        : "#ccc")
+                  );
+                });
               });
-              star.addEventListener("mouseover", () => {
-                stars.forEach((s) => (s.style.color = "#ccc"));
-                for (let i = 0; i < star.dataset.rating; i++) {
-                  stars[i].style.color = "#ffcc00";
-                }
-              });
-              star.addEventListener("mouseout", () => {
-                stars.forEach(
-                  (s) =>
-                    (s.style.color = s.classList.contains("selected")
-                      ? "#ffcc00"
-                      : "#ccc")
-                );
-              });
-            });
-          </script>
-        </body>
+            </script>
+          </main>
+       </body>
       </html>
     `;
 

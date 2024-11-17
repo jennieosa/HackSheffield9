@@ -100,6 +100,8 @@ nav ul li{
     display: flex;
     flex-direction: row;
     align-items: center;
+    background-color: white;
+    margin-top: 0px;
   }
 
   nav {
@@ -113,3 +115,20 @@ nav ul li{
 .logo{
     width:50px;
 }
+
+/* Footer styling */
+.footer {
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    font-size: 0.8em;
+    color: #777;
+  }
+
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+  }

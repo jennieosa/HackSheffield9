@@ -13,9 +13,14 @@
         margin: 0;
         padding: 0;
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
         height: 100vh;
+      }
+
+      main{
+        align-items: center;
+        display: flex;
       }
 
       .profile-container {
@@ -60,22 +65,73 @@
       .social-links a {
         margin: 0 15px;
         text-decoration: none;
-        color: #007bff;
+        color: #d47325;
         font-size: 1.2em;
       }
 
       .social-links a:hover {
-        color: #0056b3;
+        color: #d47325;
       }
+
+
+    #logo{
+        border: none;
+    }
+
+    .logo{
+        width:50px;
+    }
+
+    nav ul li{
+    padding-left: 10px;
+    border: none;
+  }
+
+  nav ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+    margin-top: 0px;
+  }
+
+  .profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+      }
+
+  nav {
+    width: 100%;
+  }
+
+  a {
+    color: #d47325;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+
     </style>
   </head>
   <body>
     <nav>
       <ul>
-        <li id = "logo"><a href="home.html"><img src="images/ember_logo.png" alt = "logo" class="logo"></a></li>
-        <li><a href="home.html">Home</a></li>
-        <li><a href="leaderboard.html">Leaderboard</a></li>
-        <li><a href="profile.html">Profile</a></li>
+        <li id = "logo"><a href="/home"><img src="images/ember_logo.png" alt = "logo" class="logo"></a></li>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/leaderboard">Leaderboard</a></li>
+        <li><a href="/profile"><img
+          src="https://via.placeholder.com/50"
+          alt="User Profile Picture"
+          class="profile-pic"
+        /></a></li>
       </ul>
     </nav>
 
