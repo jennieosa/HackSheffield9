@@ -1,4 +1,3 @@
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
@@ -572,6 +571,103 @@ app.get('/api/theme', (req, res) => {
 
     const theme = row ? row.theme : 'Default Theme';
     res.json({ theme: theme });
+  });
+});
+
+// Post History route
+app.get('/post-history', (req, res) => {
+  const userId = req.cookies.userId;
+
+  if (!userId) {
+    return res.status(401).send("You must be logged in to view your post history.");
+  }
+
+  // Query to get posts for the logged-in user
+  db.all('SELECT post_id, theme, photo FROM posts WHERE user_id = ?', [userId], (err, posts) => {
+    if (err) {
+      console.error("Error fetching posts:", err.message);
+      return res.status(500).send("Error retrieving posts.");
+    }
+
+    if (!posts || posts.length === 0) {
+      return res.status(404).send("No posts found.");
+    }
+
+    // Fetch the username of the current user
+    db.get('SELECT username FROM users WHERE user_id = ?', [userId], (err, user) => {
+      if (err || !user) {
+        console.error("Error fetching user data:", err.message);
+        return res.status(500).send("Error retrieving user data.");
+      }
+
+      // Render the post history page with the posts
+      const html = `
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>${user.username}'s Post History</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+              }
+              .post-container {
+                width: 100%;
+                max-width: 600px;
+                background-color: white;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+              }
+              .post-header {
+                text-align: center;
+                font-size: 1.5em;
+                font-weight: bold;
+                margin-bottom: 20px;
+              }
+              .post-item {
+                margin-bottom: 20px;
+                background-color: #fafafa;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+              }
+              .post-theme {
+                font-size: 1.2em;
+                font-weight: bold;
+                color: #333;
+              }
+              .post-photo {
+                width: 100%;
+                height: auto;
+                border-radius: 8px;
+                margin-top: 10px;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="post-container">
+              <h1>${user.username}'s Post History</h1>
+              ${posts.map(post => `
+                <div class="post-item">
+                  <div class="post-theme">${post.theme}</div>
+                  <img src="data:image/jpeg;base64,${post.photo.toString('base64')}" alt="Post Photo" class="post-photo" />
+                </div>
+              `).join('')}
+            </div>
+          </body>
+        </html>
+      `;
+
+      // Send the HTML to the client
+      res.send(html);
+    });
   });
 });
 
