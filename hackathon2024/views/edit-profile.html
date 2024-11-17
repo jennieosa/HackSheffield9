@@ -13,14 +13,9 @@
         margin: 0;
         padding: 0;
         display: flex;
-        flex-wrap: wrap;
         justify-content: center;
-        height: 100vh;
-      }
-
-      main{
         align-items: center;
-        display: flex;
+        height: 100vh;
       }
 
       .profile-container {
@@ -65,59 +60,13 @@
       .social-links a {
         margin: 0 15px;
         text-decoration: none;
-        color: #d47325;
+        color: #007bff;
         font-size: 1.2em;
       }
 
       .social-links a:hover {
-        color: #d47325;
+        color: #0056b3;
       }
-
-
-    #logo{
-        border: none;
-    }
-
-    .logo{
-        width:50px;
-    }
-
-    nav ul li{
-    padding-left: 10px;
-    border: none;
-  }
-
-  nav ul{
-    list-style: none;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: white;
-    margin-top: 0px;
-  }
-
-  .profile-pic {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 15px;
-      }
-
-  nav {
-    width: 100%;
-  }
-
-  a {
-    color: #d47325;
-    text-decoration: none;
-    font-size: 14px;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
 
       /* General button styles */
       .btn {
@@ -159,50 +108,68 @@
           text-align: center;
           margin-top: 20px;
       }
+
+      .form-container {
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      input[type="text"],
+      input[type="file"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
     </style>
   </head>
   <body>
-    <nav>
-      <ul>
-        <li id = "logo"><a href="/home"><img src="images/ember_logo.png" alt = "logo" class="logo"></a></li>
-        <li><a href="/home">Home</a></li>
-        <li><a href="/leaderboard">Leaderboard</a></li>
-        <li><a href="/profile"><img
-          src="https://via.placeholder.com/50"
-          alt="User Profile Picture"
-          class="profile-pic"
-        /></a></li>
-      </ul>
-    </nav>
-
     <main>
       <div class="profile-container">
         <!-- Profile Header -->
         <div class="profile-header">
-          <img src="https://via.placeholder.com/150" alt="Profile Picture" />
-          <h1><span id="username"></span></h1>
-          <p>Streak</p>
+            <h1>Edit Profile</h1>
+            <h2><span id="username"></span></h2>
+            <p>Streak</p>
         </div>
         <!-- Bio Section -->
         <div class="bio">
-          <p>This is the bio!</p>
           <span id="bio"></span>
         </div>
 
-        <!-- Social Links Section -->
-        <div class="social-links">
-          <a href="fragments/post.html">Fave post 1</a>
-          <a href="fragments/post.html">Fave post 2</a>
-          <a href="fragments/post.html">Fave post 3</a>
+        
+
+        
+        <div class="form-container">
+            <label for="photo">Profile Picture</label>
+            <input type="file" id="pfp" name="pfp" accept="image/*" />
+
+            <form action="/edit-profile" method="POST" class="button-form">
+            
+            <label for="theme">Bio</label>
+            <input type="text" id="bio" name="bio" value="" required />
+
+            <button type="submit" class="btn edit-btn">Save Changes</button>
+            </form>
+
         </div>
 
-        <div class="buttons-wrapper">
-          <form action="/logout" method="GET" class="button-form">
-            <button type="submit" class="btn logout-btn">Logout</button>
+        
+          <form class="buttons-wrapper" action="/profile" method="GET" class="button-form">
+            <button class="btn logout-btn">Back</button>
           </form>
+        
 
-          <button onclick="window.location.href='/edit-profile'" class="btn edit-btn">Edit Profile</button>
-        </div>
       </div>
     </main>
   </div>
@@ -218,15 +185,16 @@
             document.getElementById('username').textContent = 'Guest';
         });
 
-    // Fetch the bio from the server-side API0
+        // Fetch the bio from the server-side API
     fetch('/api/bio')
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('bio').textContent = data.bio;
-    })
-    .catch(error => {
-        document.getElementById('bio').textContent = 'This is a bio';
-    });
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('bio').textContent = data.bio;
+        })
+        .catch(error => {
+            document.getElementById('bio').textContent = 'This is a bio';
+        });
   </script>
+
   </body>
 </html>

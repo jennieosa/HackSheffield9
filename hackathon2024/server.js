@@ -7,6 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const cron = require('node-cron');
+const { get } = require('http');
 const app = express();
 
 // Set up multer to store files as buffers (no disk storage)
@@ -54,12 +55,56 @@ app.get('/profile', (req, res) => {
     }
   });
 
+app.get('/edit-profile', (req, res) => {
+    const username = req.cookies.username;
+
+    // Check if the cookie exists
+    if (!username) {
+        return res.redirect('/login');
+    } else {
+        res.sendFile(__dirname + '/views/edit-profile.html');
+    }
+  });
+
+// Route to handle profile edits
+app.post('/edit-profile', (req, res) => {
+    const { bio } = req.body;
+    const userId = req.cookies.userId;
+  
+    if (!userId) {
+      return res.status(403).send('Not logged in');
+    }
+  
+    // Update the user in the database
+    db.run(
+      'UPDATE users SET bio = ? WHERE user_id = ?',
+      [bio],
+      function (err) {
+        if (err) {
+          return res.status(500).send('Failed to update profile');
+        }
+  
+        // Update the cookies with the new information
+        
+        res.cookie('bio', bio);
+        res.redirect('/profile');
+      }
+    );
+  });
+
 // API route to get the username cookie value
 app.get('/api/username', (req, res) => {
     const username = req.cookies.username || 'Guest';
     res.json({ username });
 });
 
+// API route to get the bio cookie value
+app.get('/api/bio', (req, res) => {
+    const bio = req.cookies.bio || 'This is a bio';
+    res.json({ bio });
+});
+
+// Serve home page (after successful login/registration)
 app.get('/home', (req, res) => {
   // Query to fetch all posts from the posts table
   db.all('SELECT p.post_id, p.theme, p.photo, u.username FROM posts p JOIN users u ON p.user_id = u.user_id', (err, rows) => {
@@ -420,6 +465,7 @@ app.post('/login', (req, res) => {
 
       // Create a session (using a simple cookie)
       res.cookie('userId', user.user_id, { maxAge: 86400000, httpOnly: true }); // 1 day
+      res.cookie('bio', user.bio, { maxAge: 86400000, httpOnly: true });
       res.redirect('/home');
     });
   });
