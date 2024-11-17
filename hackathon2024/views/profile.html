@@ -72,7 +72,7 @@
       <!-- Profile Header -->
       <div class="profile-header">
         <img src="https://via.placeholder.com/150" alt="Profile Picture" />
-        <h1>Username</h1>
+        <h1><span id="username"></span></h1>
         <p>Streak</p>
       </div>
 
@@ -88,5 +88,18 @@
         <a href="fragments/post.html">Fave post 3</a>
       </div>
     </div>
+
+  <script>
+    // Fetch the username from the server-side API
+    fetch('/api/username')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('username').textContent = data.username;
+        })
+        .catch(error => {
+            document.getElementById('username').textContent = 'Guest';
+        });
+  </script>
+
   </body>
 </html>

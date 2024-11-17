@@ -20,6 +20,31 @@ app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/views/login.html');
 });
 
+// Serve friends page
+app.get('/friends', (req, res) => {
+    res.sendFile(__dirname + '/views/friends.html');
+  });
+
+// Serve profile page
+app.get('/profile', (req, res) => {
+    const username = req.cookies.username;
+
+    // Check if the cookie exists
+    if (!username) {
+        console.log('No cookie found, redirecting to login.');
+        return res.redirect('/login');
+    } else {
+        console.log('Cookie found:', username);
+        res.sendFile(__dirname + '/views/profile.html');
+    }
+  });
+
+// API route to get the username cookie value
+app.get('/api/username', (req, res) => {
+    const username = req.cookies.username || 'Guest';
+    res.json({ username });
+});
+
 // Serve home page (after successful login/registration)
 app.get('/home', (req, res) => {
   // Check if the user is logged in by checking the session or cookie
@@ -92,6 +117,14 @@ app.post('/login', (req, res) => {
     if (err || !user) {
       return res.status(401).send("User not found.");
     }
+    
+    // Set the cookie with options to ensure it's sent correctly
+    res.cookie('username', user.username, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        sameSite: 'Strict', // Helps with CSRF protection
+        secure: false // Set to true if you're using HTTPS
+    });
 
     // Compare the hashed password
     bcrypt.compare(password, user.password, (err, result) => {
@@ -100,7 +133,7 @@ app.post('/login', (req, res) => {
       }
 
       // Create a session (using a simple cookie)
-      res.cookie('userId', user.id, { maxAge: 86400000 }); // 1 day
+      res.cookie('userId', user.user_id, { maxAge: 86400000 }); // 1 day
       res.redirect('/home');
     });
   });
@@ -109,6 +142,7 @@ app.post('/login', (req, res) => {
 // Logout route
 app.get('/logout', (req, res) => {
   res.clearCookie('userId');
+  res.clearCookie('username');
   res.redirect('/login');
 });
 
