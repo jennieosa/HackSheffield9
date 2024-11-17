@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ember - Ignite Your Creativity</title>
+    <link rel="icon" type="image/x-icon" href="images/ember_logo.png">
     <style>
       /* Reset some basic styling */
       * {
@@ -13,7 +14,7 @@
       }
 
       body {
-        font-family: Arial, sans-serif;
+        font-family: "Times New Roman";
         background-color: #f8f8f8;
         color: #333;
         display: flex;
@@ -28,18 +29,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
-        margin-bottom: 50px;
+        margin-bottom: 20px;
       }
 
       .logo {
-        width: 50px;
-        height: 50px;
+        width: 85px;
+        height: auto;
       }
 
       h1 {
         font-size: 2.5em;
-        color: #ff6600; /* Ember-inspired color */
       }
 
       /* Main Content styling */
@@ -70,7 +69,7 @@
       }
 
       .cta-button {
-        background-color: #ff6600; /* Ember-inspired color */
+        background-color: #d47325; /* Ember-inspired color */
         color: white;
         text-decoration: none;
         padding: 15px 30px;
@@ -96,7 +95,7 @@
   <body>
     <!-- Header with Logo and App Name -->
     <header class="header">
-      <img src="https://via.placeholder.com/50" alt="Ember Logo" class="logo" />
+      <img src="images/ember_logo.png" alt="Ember Logo" class="logo" />
       <h1>Ember</h1>
     </header>
 
@@ -109,8 +108,8 @@
       </p>
 
       <div class="cta-buttons">
-        <a href="register.html" class="cta-button">Sign Up</a>
-        <a href="login.html" class="cta-button">Login</a>
+        <a href="/register" class="cta-button">Sign Up</a>
+        <a href="/login" class="cta-button">Login</a>
       </div>
     </main>
 

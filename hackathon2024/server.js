@@ -20,6 +20,11 @@ app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/views/login.html');
 });
 
+// Serve landing page
+app.get('/landing', (req, res) => {
+  res.sendFile(__dirname + '/views/landingpage.html');
+});
+
 // Serve home page (after successful login/registration)
 app.get('/home', (req, res) => {
   // Check if the user is logged in by checking the session or cookie
@@ -27,6 +32,15 @@ app.get('/home', (req, res) => {
     return res.redirect('/login');
   }
   res.sendFile(__dirname + '/views/home.html');
+});
+
+// Serve leaderboard page if logged in
+app.get('/leaderboard', (req, res) => {
+  // Check if the user is logged in by checking the session or cookie
+  if (!req.cookies.userId) {
+    return res.redirect('/login');
+  }
+  res.sendFile(__dirname + '/views/leaderboard.html');
 });
 
 // Registration route
