@@ -45,15 +45,15 @@
       }
       .username {
         text-decoration: none;
-        color: #007bff;
+        color: #000000;
         font-size: 1.1em;
       }
       .username:hover {
-        color: #0056b3;
+        color: #000000;
       }
       .remove-friend-button {
         padding: 5px 10px;
-        background-color: #ff4d4d;
+        background-color: #d47325;
         color: white;
         border: none;
         border-radius: 5px;
@@ -84,24 +84,72 @@
       nav {
         width: 100%;
       }
+
+      input[type=text] {
+          padding: 6px;
+          margin-top: 8px;
+          font-size: 17px;
+          color: #f4f4f4;
+          border: 1px solid #acacac;
+      }
+
+      .search-container button {
+          padding: 6px 10px;
+          margin-top: 8px;
+          margin-right: 16px;
+          border: 1px solid #acacac;
+          background: #ffffff;
+          font-size: 17px;
+          cursor: pointer;
+          float: right;
+      }
+
+      .search-container button:hover {
+          background: #ccc;
+      }
+
+      input#searchInput {
+        border-radius: 10px;
+      }
+
+      button#searchButton {
+          border-radius: 10px;
+      }
+
+      #first{
+        padding-top: 30px;
+      }
+
+      #searchForm{
+        text-align: center;
+      }
+
     </style>
   </head>
   <body>
+    <nav>
+      <ul>
+        <li id = "logo"><a href="/home"><img src="images/ember_logo.png" alt = "logo" class="logo"></a></li>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/leaderboard">Leaderboard</a></li>
+        <li><a href="/profile">Profile</a></li>
+      </ul>
+    </nav>
     <main>
-      <div class="search-container">
-        <form id="searchForm">
-            <input type="text" id="searchInput" placeholder="Search.." name="search">
-            <button id="searchButton" type="submit">
-                <span>
-                    <i class="fa fa-search"></i>
-                </span>
-            </button>
-        </form>
-    </div>
-
       <div class="user-list-container">
         <!-- User Row 1 -->
-        <div class="user-row">
+        <div class="search-container">
+          <form id="searchForm">
+              <input type="text" id="searchInput" placeholder="Search.." name="search" size = "55">
+              <button id="searchButton" type="submit">
+                  <span style = "color: #757575">
+                      <i class="fa fa-search"></i>
+                  </span>
+              </button>
+          </form>
+      </div>
+
+        <div class="user-row" id = "first">
           <div class="user-info">
             <img
               src="https://via.placeholder.com/50"
